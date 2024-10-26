@@ -116,7 +116,7 @@ local SF = scaleForm('instructional_buttons')
 --list refs
 local _LR = {}
 function JSlang.list(root, name, tableCommands, description, ...)
-    local ref = menu.list(root, JSlang.trans(name), if tableCommands then tableCommands else {}, JSlang.trans(description), ...)
+    local ref = menu.list(root, JSlang.trans(name), tableCommands or {}, JSlang.trans(description), ...)
         _LR[name] = ref
     return ref
 end
@@ -1849,8 +1849,8 @@ do
             GRAPHICS._SEETHROUGH_SET_MAX_THICKNESS(1) --default value is 1
         elseif JSkey.is_key_just_down('VK_E') then
             local state = menu.get_value(thermal_command)
-            menu.trigger_command(thermal_command, if state or not aiming then 'off' else 'on')
-            GRAPHICS._SEETHROUGH_SET_MAX_THICKNESS(if state or not aiming then 1 else 50)
+            menu.trigger_command(thermal_command, state or not aiming ? 'off' : 'on')
+            GRAPHICS._SEETHROUGH_SET_MAX_THICKNESS(state or not aiming ? 1 : 50)
         end
     end)
 
@@ -2517,7 +2517,7 @@ do
             ['Electric'] = 'CYCLONE',
         }
         JSlang.textslider_stateful(_LR['Vehicle sounds'], 'Engine sound', {'JSengineSound'}, '', {'Default', 'Silent', 'Electric'}, function(index, value)
-            AUDIO._FORCE_VEHICLE_ENGINE_AUDIO(entities.get_user_vehicle_as_handle(), if type(car_sounds[value]) == 'string' then car_sounds[value] else car_sounds[value]())
+            AUDIO._FORCE_VEHICLE_ENGINE_AUDIO(entities.get_user_vehicle_as_handle(), type(car_sounds[value]) == 'string' ? car_sounds[value] : car_sounds[value]())
         end)
 
         JSlang.toggle_loop(_LR['Vehicle sounds'], 'Immersive radio', {'JSemersiveRadio'}, 'Lowers the radio volume when you\'re not in first person mode.', function()
@@ -3532,7 +3532,7 @@ local play_credits_toggle
 local anticrashcam_command = menu.ref_by_path('Game>Camera>Anti-Crash Camera', 37)
 local function creditsPlaying(toggle)
     playingCredits = toggle
-    menu.trigger_command(anticrashcam_command, if toggle then 'on' else 'off')
+    menu.trigger_command(anticrashcam_command, toggle ? 'on' : 'off')
     util.create_tick_handler(function()
         directx.draw_rect(0, 0, 1, 1, black)
         directx.draw_texture(JS_logo, 0.25, 0.25, 0.5, 0.5, 0.14, 0.5, 0 , white)
@@ -3555,7 +3555,7 @@ local function scrollCreditsLine(textTable, index)
     while i <= 1000 do
         if not playingCredits then return end
         i += creditsSpeed
-        local text = if type(textTable.line) == 'function' then textTable.line() else textTable.line
+        local text = type(textTable.line) == 'function' ? textTable.line() : textTable.line
         directx.draw_text(0.5, 1  - i / 1000, text, 1, textTable.bold and  0.7 or 0.5, white, false)
         util.yield_once()
     end
@@ -3594,7 +3594,7 @@ local playerInfoToggles = {}
     players.on_join(function(pid)
 
         JSlang.list = function(root, name, tableCommands, description, ...)
-            return menu.list(root, JSlang.trans(name), if tableCommands then tableCommands else {}, JSlang.trans(description), ...)
+            return menu.list(root, JSlang.trans(name), tableCommands or {}, JSlang.trans(description), ...)
         end
 
         JSlang.divider(menu.player_root(pid), 'JerryScript') --added a divider here because Holy#9756 was bitching about it in vc

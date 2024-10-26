@@ -165,7 +165,7 @@ function JSlang.log(string)
 end
 
 function JSlang.list(root, name, tableCommands, description, ...)
-    return menu.list(root, JSlang.trans(name), if tableCommands then tableCommands else {}, JSlang.trans(description), ...)
+    return menu.list(root, JSlang.trans(name), tableCommands or {}, JSlang.trans(description), ...)
 end
 
 function JSlang.action(root, name, tableCommands, description, ...)
