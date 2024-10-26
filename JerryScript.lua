@@ -10,6 +10,8 @@
     thx to Sai, ren, aaron, Nowry, JayMontana, IceDoomfist and scriptCat and everyone else that helped me in #programming :)
 ]]
 
+pluto_use "0.5.0"
+
 local LOADING_START = util.current_time_millis()
 LOADING_SCRIPT = true
 
